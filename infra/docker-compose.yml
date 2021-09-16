@@ -1,0 +1,10 @@
+services:
+  postgres:
+    image: postgres
+    container_name: "postgres"
+    environment:
+      - POSTGRES_DB=overlook-hotel
+      - POSTGRES_USER=redrum
+      - POSTGRES_PASSWORD=redrum123
+    ports:
+      - 5432:5432
