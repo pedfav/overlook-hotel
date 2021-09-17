@@ -5,23 +5,24 @@ import com.pedfav.overlookhotel.gateway.http.converter.UserConverter;
 import com.pedfav.overlookhotel.gateway.http.datacontracts.UserDataContract;
 import com.pedfav.overlookhotel.usecases.UserUseCase;
 import lombok.AllArgsConstructor;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RestController
 @AllArgsConstructor
-@RestController("/user")
+@RequestMapping(value="/user")
 public class UserController {
 
     private final UserUseCase userUseCase;
     private final UserConverter userConverter;
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDataContract> getUserById(@PathParam("id") Long id) {
+    public ResponseEntity<UserDataContract> getUserById(@PathVariable("id") Long id) {
 
         User user = userUseCase.getUserById(id);
         UserDataContract userDataContract = userConverter.userToUserDataContract(user);
@@ -30,8 +31,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDataContract>> listUsers(@DefaultValue("0") @PathParam("page") Integer page,
-                                                              @DefaultValue("5") @PathParam("page_size") Integer pageSize) {
+    public ResponseEntity<List<UserDataContract>> listUsers(@RequestParam(defaultValue="0", name="page") Integer page,
+                                                            @RequestParam(defaultValue="5", name="page_size") Integer pageSize) {
 
         List<UserDataContract> users = userUseCase.listUsers(page, pageSize)
                 .stream()
@@ -42,7 +43,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDataContract> createUser(@RequestBody UserDataContract userDataContract) {
+    public ResponseEntity<UserDataContract> createUser(@Valid @RequestBody UserDataContract userDataContract) {
 
         User user = userUseCase.createUser(userConverter.userDataContractToUser(userDataContract));
 
@@ -50,8 +51,8 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDataContract> modifyUser(@PathParam("id") Long id,
-                                                       @RequestBody UserDataContract userDataContract) {
+    public ResponseEntity<UserDataContract> modifyUser(@PathVariable("id") Long id,
+                                                       @Valid @RequestBody UserDataContract userDataContract) {
 
         User user = userUseCase.modifyUser(id, userConverter.userDataContractToUser(userDataContract));
 
@@ -59,7 +60,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUserById(@PathParam("id") Long id) {
+    public ResponseEntity<Void> deleteUserById(@PathVariable("id") Long id) {
         userUseCase.deleteUserById(id);
 
         return ResponseEntity.ok().build();

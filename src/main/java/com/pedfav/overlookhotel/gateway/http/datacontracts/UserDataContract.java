@@ -1,5 +1,6 @@
 package com.pedfav.overlookhotel.gateway.http.datacontracts;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.validation.constraints.Email;
@@ -21,14 +22,12 @@ public class UserDataContract {
     private Long id;
 
     @NotBlank
-    private String documentId;
-
-    @NotBlank
     private String name;
 
-    @Email(message = "Email should be valid")
+    @Email(message="Email should be valid")
     private String email;
 
     @Past
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate birthday;
 }

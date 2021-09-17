@@ -1,9 +1,11 @@
 package com.pedfav.overlookhotel.usecases;
 
 import com.pedfav.overlookhotel.entities.User;
+import com.pedfav.overlookhotel.exceptions.EmailAlreadyTakenException;
 import com.pedfav.overlookhotel.exceptions.ResourceNotFoundException;
 import com.pedfav.overlookhotel.gateway.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +27,11 @@ public class UserUseCase {
     }
 
     public User createUser(User user) {
-        return userRepository.save(user);
+        try {
+            return userRepository.save(user);
+        } catch(DataIntegrityViolationException e) {
+            throw new EmailAlreadyTakenException("Email already taken, please use another one!");
+        }
     }
 
     public User modifyUser(Long id, User user) {
@@ -34,7 +40,11 @@ public class UserUseCase {
 
         user.setId(id);
 
-        return userRepository.save(user);
+        try {
+            return userRepository.save(user);
+        } catch(DataIntegrityViolationException e) {
+            throw new EmailAlreadyTakenException("Email already taken, please use another one!");
+        }
     }
 
     public void deleteUserById(Long id) {
