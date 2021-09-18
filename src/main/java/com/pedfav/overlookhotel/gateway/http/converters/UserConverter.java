@@ -1,4 +1,4 @@
-package com.pedfav.overlookhotel.gateway.http.converter;
+package com.pedfav.overlookhotel.gateway.http.converters;
 
 import com.pedfav.overlookhotel.entities.User;
 import com.pedfav.overlookhotel.gateway.http.datacontracts.UserDataContract;

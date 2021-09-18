@@ -1,4 +1,4 @@
-package com.pedfav.overlookhotel.gateway.http.controllers;
+package com.pedfav.overlookhotel.gateway.http;
 
 import com.pedfav.overlookhotel.exceptions.EmailAlreadyTakenException;
 import com.pedfav.overlookhotel.exceptions.ResourceNotFoundException;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value={ ResourceNotFoundException.class })
+    @ExceptionHandler(value = {ResourceNotFoundException.class})
     protected ResponseEntity<Object> handleNotFound(ResourceNotFoundException ex, WebRequest request) {
         ErrorDataContract errorDataContract = ErrorDataContract.builder()
                 .message(ex.getMessage())
@@ -28,7 +28,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return handleExceptionInternal(ex, errorDataContract, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
-    @ExceptionHandler(value={ EmailAlreadyTakenException.class })
+    @ExceptionHandler(value = {EmailAlreadyTakenException.class})
     protected ResponseEntity<Object> handleConstraintViolation(RuntimeException ex, WebRequest request) {
         ErrorDataContract errorDataContract = ErrorDataContract.builder()
                 .message(ex.getMessage())
@@ -52,7 +52,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return handleExceptionInternal(ex, errorDataContract, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
-    @ExceptionHandler(value={ Exception.class })
+    @ExceptionHandler(value = {Exception.class})
     protected ResponseEntity<Object> handleConstraintViolation(Exception ex, WebRequest request) {
         ErrorDataContract errorDataContract = ErrorDataContract.builder()
                 .message("Something went wrong, please try again!")

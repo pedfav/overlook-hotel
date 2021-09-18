@@ -1,12 +1,11 @@
 package com.pedfav.overlookhotel.gateway.http.controllers;
 
 import com.pedfav.overlookhotel.entities.User;
-import com.pedfav.overlookhotel.gateway.http.converter.UserConverter;
+import com.pedfav.overlookhotel.gateway.http.converters.UserConverter;
 import com.pedfav.overlookhotel.gateway.http.datacontracts.UserDataContract;
 import com.pedfav.overlookhotel.usecases.UserUseCase;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -15,7 +14,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping(value="/user")
+@RequestMapping(value = "/users")
 public class UserController {
 
     private final UserUseCase userUseCase;
@@ -31,8 +30,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDataContract>> listUsers(@RequestParam(defaultValue="0", name="page") Integer page,
-                                                            @RequestParam(defaultValue="5", name="page_size") Integer pageSize) {
+    public ResponseEntity<List<UserDataContract>> listUsers(@RequestParam(defaultValue = "0", name = "page") Integer page,
+                                                            @RequestParam(defaultValue = "5", name = "page_size") Integer pageSize) {
 
         List<UserDataContract> users = userUseCase.listUsers(page, pageSize)
                 .stream()

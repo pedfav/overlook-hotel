@@ -9,6 +9,7 @@ spring:
     username: redrum
     password: redrum123
     initialize: true
+    initialization-mode: always
   jpa:
     properties:
       hibernate:
@@ -17,4 +18,4 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
         hbm2ddl:
-          auto: update
+          auto: none
