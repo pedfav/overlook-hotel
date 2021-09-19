@@ -1,6 +1,6 @@
 package com.pedfav.overlookhotel.usecases;
 
-import com.pedfav.overlookhotel.config.ValidationsProperties;
+import com.pedfav.overlookhotel.config.Properties;
 import com.pedfav.overlookhotel.entities.Reservation;
 import com.pedfav.overlookhotel.exceptions.PlaceReservationException;
 import com.pedfav.overlookhotel.exceptions.ResourceNotFoundException;
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -21,7 +22,7 @@ public class ReservationUseCase {
 
     private final ReservationRepository reservationRepository;
     private final UserUseCase userUseCase;
-    private final ValidationsProperties validationsProperties;
+    private final Properties properties;
 
     public Reservation getReservationById(Long id) {
         return reservationRepository.findById(id)
@@ -73,6 +74,10 @@ public class ReservationUseCase {
         reservationRepository.deleteById(id);
     }
 
+    public List<Reservation> findAvailability(LocalDateTime startDate, LocalDateTime endDate) {
+        return reservationRepository.findAvailability(startDate, endDate);
+    }
+
     private Reservation populateCreateReservation(Reservation reservation) {
         LocalDateTime now = LocalDateTime.now();
         reservation.setStartDate(reservation.getStartDate().toLocalDate().atStartOfDay());
@@ -97,7 +102,7 @@ public class ReservationUseCase {
     private Reservation checkIfReservationsStartsToday(Reservation reservation) {
         Duration daysToReserve = Duration.between(LocalDateTime.now(), reservation.getStartDate());
 
-        if (daysToReserve.toDays() > validationsProperties.getMaxReserveInAdvance()) {
+        if (daysToReserve.toDays() > properties.getMaxReserveInAdvance()) {
             throw new PlaceReservationException("Your reservation needs to start at least within 30 days!");
         }
 
@@ -126,7 +131,7 @@ public class ReservationUseCase {
     private Reservation checkReservationLongerThanAllowed(Reservation reservation) {
         Duration lengthOfStay = Duration.between(reservation.getStartDate(), reservation.getEndDate());
 
-        if ((lengthOfStay.toDays() + 1) > validationsProperties.getMaxStayInDays()) {
+        if ((lengthOfStay.toDays() + 1) > properties.getMaxStayInDays()) {
             throw new PlaceReservationException("Your reservation is greater than allowed!");
         }
 

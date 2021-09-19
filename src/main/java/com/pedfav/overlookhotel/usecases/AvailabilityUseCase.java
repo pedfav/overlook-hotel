@@ -1,10 +1,9 @@
 package com.pedfav.overlookhotel.usecases;
 
-import com.pedfav.overlookhotel.config.ValidationsProperties;
+import com.pedfav.overlookhotel.config.Properties;
 import com.pedfav.overlookhotel.entities.Availability;
 import com.pedfav.overlookhotel.entities.RoomAvailability;
 import com.pedfav.overlookhotel.exceptions.PlaceReservationException;
-import com.pedfav.overlookhotel.gateway.repository.ReservationRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -24,8 +23,8 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 public class AvailabilityUseCase {
 
-    private final ReservationRepository reservationRepository;
-    private final ValidationsProperties validationsProperties;
+    private final ReservationUseCase reservationUseCase;
+    private final Properties properties;
 
     public Availability getRoomAvailabilityByPeriod(LocalDate startDate, LocalDate endDate) {
 
@@ -33,7 +32,7 @@ public class AvailabilityUseCase {
         LocalDateTime endDateWithTime = endDate.atTime(23, 59, 59);
 
         checkDates(startDateWithTime, endDateWithTime);
-        boolean isAvailable = reservationRepository.findAvailability(startDateWithTime, endDateWithTime).isEmpty();
+        boolean isAvailable = reservationUseCase.findAvailability(startDateWithTime, endDateWithTime).isEmpty();
 
         return Availability.builder()
                 .startDate(startDateWithTime.toLocalDate())
@@ -48,7 +47,7 @@ public class AvailabilityUseCase {
         LocalDateTime startDate = LocalDateTime.of(year, month, 1, 0, 0, 0);
         LocalDateTime endDate = LocalDateTime.of(year, month, Month.of(month).maxLength(), 23, 59, 59);
 
-        List<LocalDate> daysReserved = reservationRepository.findAvailability(startDate, endDate).stream()
+        List<LocalDate> daysReserved = reservationUseCase.findAvailability(startDate, endDate).stream()
                 .map(reservation -> reservation.getStartDate().toLocalDate()
                         .datesUntil(reservation.getEndDate().toLocalDate().plusDays(1))
                         .collect(Collectors.toList())
@@ -94,7 +93,7 @@ public class AvailabilityUseCase {
             throw new PlaceReservationException("Dates are in the past!");
         }
 
-        if ((lengthOfStay.toDays() + 1) > validationsProperties.getMaxStayInDays()) {
+        if ((lengthOfStay.toDays() + 1) > properties.getMaxStayInDays()) {
             throw new PlaceReservationException("The period is greater than allowed!");
         }
     }

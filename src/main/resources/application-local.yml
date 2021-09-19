@@ -20,6 +20,7 @@ spring:
         hbm2ddl:
           auto: none
 
-validations:
+app:
   maxStayInDays: 3
   maxReserveInAdvance: 30
+  suggestionRange: 5

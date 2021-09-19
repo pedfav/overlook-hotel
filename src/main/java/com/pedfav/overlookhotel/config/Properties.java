@@ -5,9 +5,10 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ValidationsProperties {
+public class Properties {
 
     private Integer maxStayInDays;
     private Integer maxReserveInAdvance;
+    private Integer suggestionRange;
 
 }

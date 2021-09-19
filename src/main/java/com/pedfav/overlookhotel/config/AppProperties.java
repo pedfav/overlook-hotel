@@ -8,14 +8,17 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AppProperties {
 
-    @Value("${validations.maxStayInDays:3}")
+    @Value("${app.maxStayInDays:3}")
     private Integer maxStayInDays;
 
-    @Value("${validations.maxReserveInAdvance:30}")
+    @Value("${app.maxReserveInAdvance:30}")
     private Integer maxReserveInAdvance;
 
+    @Value("${app.suggestionRange:5}")
+    private Integer suggestionRange;
+
     @Bean
-    public ValidationsProperties maxStayInDays() {
-        return new ValidationsProperties(maxStayInDays, maxReserveInAdvance);
+    public Properties maxStayInDays() {
+        return new Properties(maxStayInDays, maxReserveInAdvance, suggestionRange);
     }
 }
