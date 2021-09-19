@@ -32,7 +32,7 @@ public class ReservationUseCase {
 
         try {
             Reservation reservationValidated = Optional.of(reservation)
-                    .map(res -> populateReservation(res, true))
+                    .map(this::populateCreateReservation)
                     .map(this::checkIfReservationsStartsToday)
                     .map(this::checkReservationIsTooFar)
                     .map(this::checkEndDateBeforeStartDate)
@@ -50,18 +50,20 @@ public class ReservationUseCase {
     }
 
     public Reservation modifyReservation(Reservation reservation, Long id) {
-        reservationRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Reservation", "Id", id));
 
-        Reservation reservationValidated = Optional.of(reservation)
-                .map(res -> populateReservation(res, false))
-                .map(this::checkIfReservationsStartsToday)
-                .map(this::checkReservationIsTooFar)
-                .map(this::checkEndDateBeforeStartDate)
-                .map(this::checkReservationLongerThanThreeDays)
-                .get();
+        try {
+            Reservation reservationValidated = Optional.of(reservation)
+                    .map(res -> populateUpdateReservation(reservation, id))
+                    .map(this::checkIfReservationsStartsToday)
+                    .map(this::checkReservationIsTooFar)
+                    .map(this::checkEndDateBeforeStartDate)
+                    .map(this::checkReservationLongerThanThreeDays)
+                    .get();
 
-        return reservationRepository.save(reservationValidated);
+            return reservationRepository.save(reservationValidated);
+        } catch (DataIntegrityViolationException e) {
+            throw new PlaceReservationException("Reservation period already taken!");
+        }
     }
 
     public void cancelReservation(Long id) {
@@ -71,16 +73,25 @@ public class ReservationUseCase {
         reservationRepository.deleteById(id);
     }
 
-    private Reservation populateReservation(Reservation reservation, boolean isCreation) {
+    private Reservation populateCreateReservation(Reservation reservation) {
         LocalDateTime now = LocalDateTime.now();
         reservation.setStartDate(reservation.getStartDate().toLocalDate().atStartOfDay());
         reservation.setEndDate(reservation.getEndDate().toLocalDate().atTime(23, 59, 59));
-        if (isCreation) {
-            reservation.setInsertDate(now);
-        }
+        reservation.setInsertDate(now);
         reservation.setUpdateDate(now);
 
         return reservation;
+    }
+
+    private Reservation populateUpdateReservation(Reservation reservation, Long id) {
+        Reservation saved = getReservationById(id);
+
+        LocalDateTime now = LocalDateTime.now();
+        saved.setStartDate(reservation.getStartDate().toLocalDate().atStartOfDay());
+        saved.setEndDate(reservation.getEndDate().toLocalDate().atTime(23, 59, 59));
+        saved.setUpdateDate(now);
+
+        return saved;
     }
 
     private Reservation checkIfReservationsStartsToday(Reservation reservation) {

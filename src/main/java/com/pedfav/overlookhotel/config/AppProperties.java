@@ -11,7 +11,7 @@ public class AppProperties {
     @Value("${validations.maxStayInDays:3}")
     private Integer maxStayInDays;
 
-    @Value("${validations.maxStayInDays:30}")
+    @Value("${validations.maxReserveInAdvance:30}")
     private Integer maxReserveInAdvance;
 
     @Bean
