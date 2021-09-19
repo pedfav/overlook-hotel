@@ -36,7 +36,7 @@ public class ReservationUseCase {
                     .map(this::checkIfReservationsStartsToday)
                     .map(this::checkReservationIsTooFar)
                     .map(this::checkEndDateBeforeStartDate)
-                    .map(this::checkReservationLongerThanThreeDays)
+                    .map(this::checkReservationLongerThanAllowed)
                     .map(this::checkUserExists)
                     .get();
 
@@ -57,7 +57,7 @@ public class ReservationUseCase {
                     .map(this::checkIfReservationsStartsToday)
                     .map(this::checkReservationIsTooFar)
                     .map(this::checkEndDateBeforeStartDate)
-                    .map(this::checkReservationLongerThanThreeDays)
+                    .map(this::checkReservationLongerThanAllowed)
                     .get();
 
             return reservationRepository.save(reservationValidated);
@@ -123,7 +123,7 @@ public class ReservationUseCase {
         return reservation;
     }
 
-    private Reservation checkReservationLongerThanThreeDays(Reservation reservation) {
+    private Reservation checkReservationLongerThanAllowed(Reservation reservation) {
         Duration lengthOfStay = Duration.between(reservation.getStartDate(), reservation.getEndDate());
 
         if ((lengthOfStay.toDays() + 1) > validationsProperties.getMaxStayInDays()) {

@@ -1,6 +1,5 @@
-package com.pedfav.overlookhotel.gateway.http.datacontracts;
+package com.pedfav.overlookhotel.entities;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
@@ -11,9 +10,8 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class PeriodAvailabilityDataContract {
-
+public class Availability {
+    
     @JsonProperty("start_date")
     private LocalDate startDate;
 
