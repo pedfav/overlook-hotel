@@ -19,3 +19,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         hbm2ddl:
           auto: none
+
+validations:
+  maxStayInDays: 3
+  maxReserveInAdvance: 30

@@ -25,12 +25,12 @@ public class ReservationDataContract {
     private UserDataContract user;
 
     @Future
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @JsonProperty("start_date")
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime startDate;
 
     @Future
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @JsonProperty("end_date")
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime endDate;
 }

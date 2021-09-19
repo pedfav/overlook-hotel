@@ -26,4 +26,5 @@ public class Reservation {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private LocalDateTime insertDate;
+    private LocalDateTime updateDate;
 }

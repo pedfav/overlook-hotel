@@ -1,6 +1,7 @@
 package com.pedfav.overlookhotel.gateway.http;
 
 import com.pedfav.overlookhotel.exceptions.EmailAlreadyTakenException;
+import com.pedfav.overlookhotel.exceptions.PlaceReservationException;
 import com.pedfav.overlookhotel.exceptions.ResourceNotFoundException;
 import com.pedfav.overlookhotel.gateway.http.datacontracts.ErrorDataContract;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -60,4 +61,15 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
         return handleExceptionInternal(ex, errorDataContract, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
+
+    @ExceptionHandler(value = {PlaceReservationException.class})
+    protected ResponseEntity<Object> placeReservationException(PlaceReservationException e, WebRequest request) {
+        ErrorDataContract errorDataContract = ErrorDataContract.builder()
+                .message(e.getMessage())
+                .build();
+
+        return handleExceptionInternal(e, errorDataContract, new HttpHeaders(), HttpStatus.UNPROCESSABLE_ENTITY, request);
+    }
+
+
 }

@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS reservations (
   start_date TIMESTAMP NOT NULL,
   end_date TIMESTAMP NOT NULL,
   insert_date TIMESTAMP NOT NULL,
+  update_date TIMESTAMP NOT NULL,
   EXCLUDE USING gist (tsrange(start_date, end_date) WITH &&)
 );
 
