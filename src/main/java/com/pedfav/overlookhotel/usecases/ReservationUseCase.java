@@ -100,10 +100,9 @@ public class ReservationUseCase {
     }
 
     private Reservation checkIfReservationsStartsToday(Reservation reservation) {
-        Duration daysToReserve = Duration.between(LocalDateTime.now(), reservation.getStartDate());
 
-        if (daysToReserve.toDays() > properties.getMaxReserveInAdvance()) {
-            throw new PlaceReservationException("Your reservation needs to start at least within 30 days!");
+        if (reservation.getStartDate().getDayOfMonth() == LocalDateTime.now().getDayOfMonth()) {
+            throw new PlaceReservationException("Reserve needs to start at least the next day of booking!");
         }
 
         return reservation;
@@ -111,8 +110,10 @@ public class ReservationUseCase {
 
     private Reservation checkReservationIsTooFar(Reservation reservation) {
 
-        if (reservation.getStartDate().getDayOfMonth() == LocalDateTime.now().getDayOfMonth()) {
-            throw new PlaceReservationException("Reserve needs to start at least the next day of booking!");
+        Duration daysToReserve = Duration.between(LocalDateTime.now(), reservation.getStartDate());
+
+        if (daysToReserve.toDays() > properties.getMaxReserveInAdvance()) {
+            throw new PlaceReservationException("Your reservation needs to start at least within 30 days!");
         }
 
         return reservation;
