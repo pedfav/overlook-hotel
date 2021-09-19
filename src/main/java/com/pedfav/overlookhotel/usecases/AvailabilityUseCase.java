@@ -43,6 +43,7 @@ public class AvailabilityUseCase {
     }
 
     public List<RoomAvailability> getRoomAvailabilityByMonth(Integer month, Integer year) {
+        checkMonthAndYear(month, year);
 
         LocalDateTime startDate = LocalDateTime.of(year, month, 1, 0, 0, 0);
         LocalDateTime endDate = LocalDateTime.of(year, month, Month.of(month).maxLength(), 23, 59, 59);
@@ -95,6 +96,14 @@ public class AvailabilityUseCase {
 
         if ((lengthOfStay.toDays() + 1) > validationsProperties.getMaxStayInDays()) {
             throw new PlaceReservationException("The period is greater than allowed!");
+        }
+    }
+
+    private void checkMonthAndYear(Integer month, Integer year) {
+        LocalDate now = LocalDate.now();
+
+        if ((now.getMonth().getValue() > month) || (now.getYear() > year)) {
+            throw new PlaceReservationException("Year and month must not be in the past!");
         }
     }
 }
