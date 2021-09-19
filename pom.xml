@@ -15,6 +15,7 @@
     <description>Wendy? Darling? Light, of my life. I am not gonna hurt ya.</description>
     <properties>
         <java.version>11</java.version>
+        <springfox-boot-starter.version>3.0.0</springfox-boot-starter.version>
     </properties>
 
     <dependencies>
@@ -33,6 +34,7 @@
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-boot-starter</artifactId>
+            <version>${springfox-boot-starter.version}</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
