@@ -35,7 +35,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
                 .message(ex.getMessage())
                 .build();
 
-        return handleExceptionInternal(ex, errorDataContract, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+        return handleExceptionInternal(ex, errorDataContract, new HttpHeaders(), HttpStatus.UNPROCESSABLE_ENTITY, request);
     }
 
     @Override
