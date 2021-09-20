@@ -131,8 +131,12 @@ The application will start on the port 8080, so to use the examples above, just 
 http://localhost:8080/overlook-hotel/
 `````
 
-insteade of
+instead of
 
 `````
 https://overlook-hotel-app.herokuapp.com/overlook-hotel/
 `````
+
+You can also use swagger to access the apis:
+
+https://overlook-hotel-app.herokuapp.com/overlook-hotel/swagger-ui/
